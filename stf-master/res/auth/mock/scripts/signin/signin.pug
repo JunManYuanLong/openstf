@@ -13,19 +13,18 @@
         .input-group
           span.input-group-addon
             i.fa.fa-user
-          input.form-control(ng-model='username', name='username', required, type='text', placeholder='Name',
+          input.form-control(ng-model='username', name='username', required, type='text', placeholder='Username',
           autocorrect='off', autocapitalize='off', spellcheck='false', autocomplete='section-login username')
         .alert.alert-warning(ng-show='signin.username.$dirty && signin.username.$invalid')
-          span(translate) Please enter your name
+          span(ng-show='signin.username.$error.required', translate) Please enter your username
 
       .form-group
         .input-group
           span.input-group-addon
-            i.fa.fa-envelope
-          input.form-control(ng-model='email', name='email', required, type='email', placeholder='E-mail',
-          autocorrect='off', autocapitalize='off', spellcheck='false', autocomplete='section-login email')
-        .alert.alert-warning(ng-show='signin.email.$dirty && signin.email.$invalid')
-          span(ng-show='signin.email.$error.email', translate) Please enter a valid email
-          span(ng-show='signin.email.$error.required', translate) Please enter your email
+            i.fa.fa-lock
+          input.form-control(ng-model='password', name='password', required, type='password', placeholder='Password',
+          autocorrect='off', autocapitalize='off', spellcheck='false', autocomplete='section-login current-password')
+        .alert.alert-warning(ng-show='signin.password.$dirty && signin.password.$invalid')
+          span(translate) Please enter your password
 
       input.btn.btn-lg.btn-primary.btn-block(type='submit', value='Log In')

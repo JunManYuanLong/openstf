@@ -89,7 +89,7 @@ module.exports =
     ScopedHotkeysService($scope, [
       // ['shift+up', gettext('Previous Device'), actions.previousDevice],
       // ['shift+down', gettext('Next Device'), actions.nextDevice],
-      ['command+shift+d', gettext('Go to Device List'), actions.deviceList],
+      // ['command+shift+d', gettext('Go to Device List'), actions.deviceList],
 
       ['shift+space', gettext('Selects Next IME'), actions.switchCharset],
       ['command+left', gettext('Rotate Left'), actions.rotateLeft],

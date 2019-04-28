@@ -36,7 +36,8 @@ module.exports =
 
       $scope.second = function() {
         $uibModalInstance.dismiss()
-        $location.path('/devices/')
+        window.parent.postMessage('message', "*");
+        $location.path('/settings/')
       }
 
       $scope.cancel = function() {

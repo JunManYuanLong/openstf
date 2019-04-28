@@ -84,6 +84,7 @@ module.exports = function(options) {
     res.render('index')
   })
 
+/* --------
   app.post('/auth/api/v1/mock', function(req, res) {
     var log = logger.createLogger('auth-mock')
     log.setLocalIdentifier(req.ip)
@@ -139,3 +140,116 @@ module.exports = function(options) {
   server.listen(options.port)
   log.info('Listening on port %d', options.port)
 }
+*/
+  app.post('/auth/api/v1/mock', function(req, res) {
+    var log = logger.createLogger('auth-not-mock')
+    log.setLocalIdentifier(req.ip)
+    switch (req.accepts(['json'])) {
+      case 'json':
+        urlutil.isLogin(req.body.name, req.body.password, function (canLogin,mail) {
+          requtil.validate(req, function() {
+            req.checkBody('name').notEmpty()
+            req.checkBody('email').isEmail()
+          })
+          .then(function() {
+            log.info('Authenticated "%s"', req.body.email)
+            var token = jwtutil.encode({
+              payload: {
+                email: req.body.email
+              , name: req.body.name
+              }
+            , secret: options.secret
+            , header: {
+                exp: Date.now() + 24 * 3600
+              }
+            })
+            // 执行登录后的操作
+            console.log(token)
+            res.status(200)
+            .json({
+              success: true
+            , isLogin: canLogin
+            , email:mail
+            , redirect: urlutil.addParams(options.appUrl, {
+                jwt: token
+              })
+            })
+          })
+          .catch(requtil.ValidationError, function(err) {
+            // 执行登录后的操作
+            res.status(400)
+            .json({
+              success: false
+              , isLogin: canLogin
+              , email:mail
+              , error: 'ValidationError'
+              , validationErrors: err.errors
+            })
+          })
+          .catch(function(err) {
+            log.error('Unexpected error', err.stack)
+            // 执行登录后的操作
+            res.status(500)
+              .json({
+                success: false
+                , isLogin: canLogin
+              , email:mail
+              , error: 'ServerError'
+            })
+          })
+        })
+        break
+      default:
+        res.send(406)
+        break
+    }
+  })
+
+  app.get('/auth/api/skip/mock', function(req, res) {
+    var log = logger.createLogger('auth-print-mock')
+    log.setLocalIdentifier(req.ip)
+    log.info('Authenticated "%s"', req.query.name)
+    log.info('Authenticated ip  is "%s"', req.ip)
+
+    var user = new Buffer(req.query.name, 'base64').toString('ascii')
+    user = user.trim()
+    user = req.query.name
+    log.info('base64解码的内容 "%s"',user)
+    if (!user) {
+      res.status(400)
+        .json({
+          success: false
+          , error: 'ValidationError'
+          , validationErrors: err.errors
+        })
+    }
+
+    log.info('secrest is  "%s"',options.secret)
+    //todo:异常处理
+    var token = jwtutil.encode({
+      payload: {
+        email: user + "@126.com"
+        , name: user
+      }
+      , secret: options.secret
+      // , header: {
+      //   exp: Date.now() + 24 * 3600
+      // }
+    })
+    log.info('appurl is  "%s", token is  "%s"',options.appUrl, token)
+    log.info('token is  "%s"', token)
+    res.status(200)
+      .json({
+        success: true
+        , token: token
+      })
+  })
+
+  server.listen(options.port)
+  log.info('Listening on port %d', options.port)
+
+}
+// 增加get方法，接受参数值username,返回jwt
+/*
+
+*/

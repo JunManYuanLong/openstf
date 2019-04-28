@@ -114,7 +114,7 @@ module.exports.builder = function(yargs) {
     .option('screen-jpeg-quality', {
       describe: 'The JPG quality to use for the screen.'
     , type: 'number'
-    , default: process.env.SCREEN_JPEG_QUALITY || 80
+    , default: process.env.SCREEN_JPEG_QUALITY || 40
     })
     .option('screen-ping-interval', {
       describe: 'The interval at which to send ping messages to keep the ' +

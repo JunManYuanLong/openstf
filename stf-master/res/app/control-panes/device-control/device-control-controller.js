@@ -1,5 +1,8 @@
 var _ = require('lodash')
-
+// window.addEventListener('message',function(e){
+//     console.log('666666666666666')
+//     // window.parent.postMessage('666','*');
+// },false);
 module.exports = function DeviceControlCtrl($scope, DeviceService, GroupService,
   $location, $timeout, $window, $rootScope) {
 
@@ -10,6 +13,8 @@ module.exports = function DeviceControlCtrl($scope, DeviceService, GroupService,
   $scope.groupDevices = $scope.groupTracker.devices
 
   $scope.kickDevice = function(device) {
+
+    window.parent.postMessage(device, "*");
 
     if (!device || !$scope.device) {
       alert('No device found')

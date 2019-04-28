@@ -12,6 +12,7 @@ module.exports = {
 // Specifications: https://tools.ietf.org/html/rfc6750#section-2.1
 
 function accessTokenAuth(req, res, next) {
+ // return next()
   if (req.headers.authorization) {
     var authHeader = req.headers.authorization.split(' ')
     var format = authHeader[0]

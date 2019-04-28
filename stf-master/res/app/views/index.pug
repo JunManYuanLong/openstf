@@ -15,13 +15,14 @@ html(ng-app='app')
   body(ng-cloak).bg-1.fill-height.unselectable
     div(ng-controller='LayoutCtrl', basic-mode, admin-mode, standalone, landscape).fill-height
       .pane-top.fill-height(fa-pane)
-        .pane-top-bar(fa-pane, pane-id='menu', pane-anchor='north',
+        .pane-top-bar(
+        fa-pane, pane-id='menu', pane-anchor='north',
           pane-size='{{!$root.basicMode && !$root.standalone ? 44 : 0 }}px',
-
-          pane-handle='')
+          pane-handle=''
+          )
           div(ng-include='"menu.pug"')
 
-        .pane-center(fa-pane, pane-id='main', pane-anchor='center').fill-height
+        .pane-center(fa-pane, pane-id='main', pane-anchor='center' style={position:'static'}).fill-height
           socket-state
           div(growl)
           div(ng-view).fill-height

@@ -59,6 +59,7 @@ module.exports = function DeviceScreenDirective(
         }
 
         var ws = new WebSocket(device.display.url)
+        console.log('++++++new WebSocket+++++++++')
         ws.binaryType = 'blob'
 
         ws.onerror = function errorListener() {
@@ -70,6 +71,7 @@ module.exports = function DeviceScreenDirective(
         }
 
         ws.onopen = function openListener() {
+          console.log('++++++screen+++++++++')
           checkEnabled()
         }
 
@@ -170,9 +172,11 @@ module.exports = function DeviceScreenDirective(
           var newEnabled = shouldUpdateScreen()
 
           if (newEnabled === cachedEnabled) {
+            console.log('++++++newEnabled === cachedEnabled+++++++++')
             updateBounds()
           }
           else if (newEnabled) {
+            console.log('++++++newEnabled+++++++++')
             updateBounds()
             onScreenInterestGained()
           }
@@ -188,22 +192,27 @@ module.exports = function DeviceScreenDirective(
           if (ws.readyState === WebSocket.OPEN) {
             ws.send('size ' + adjustedBoundSize.w + 'x' + adjustedBoundSize.h)
             ws.send('on')
+            console.log("++++++++++++onScreenInterestGained+++++++++++")
+            console.log('size ' + adjustedBoundSize.w + 'x' + adjustedBoundSize.h)
           }
         }
 
         function onScreenInterestAreaChanged() {
           if (ws.readyState === WebSocket.OPEN) {
             ws.send('size ' + adjustedBoundSize.w + 'x' + adjustedBoundSize.h)
+            console.log("++++++++++++onScreenInterestAreaChanged+++++++++++")
           }
         }
 
         function onScreenInterestLost() {
           if (ws.readyState === WebSocket.OPEN) {
+            console.log("++++++++++++onScreenInterestLost+++++++++++")
             ws.send('off')
           }
         }
 
         ws.onmessage = (function() {
+          console.log("ws.onmessage!+++")
           var cachedScreen = {
             rotation: 0
           , bounds: {
@@ -286,7 +295,7 @@ module.exports = function DeviceScreenDirective(
 
           return function messageListener(message) {
             screen.rotation = device.display.rotation
-
+            console.log(message)
             if (message.data instanceof Blob) {
               if (shouldUpdateScreen()) {
                 if (scope.displayError) {
@@ -336,6 +345,8 @@ module.exports = function DeviceScreenDirective(
                 }
 
                 var url = URL.createObjectURL(blob)
+                console.log("+++++++url+++++++++")
+                console.log(url)
                 img.src = url
               }
             }

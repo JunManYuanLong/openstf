@@ -503,7 +503,6 @@ module.exports = syrup.serial()
         wss.on('connection', function(ws) {
           var id = uuid.v4()
           var pingTimer
-
           function send(message, options) {
             return new Promise(function(resolve, reject) {
               switch (ws.readyState) {
@@ -513,6 +512,13 @@ module.exports = syrup.serial()
                 break
               case WebSocket.OPEN:
                 // This is what SHOULD happen.
+                log.warn("---------------------")
+                log.warn(message, options)
+                var index = Math.floor(Math.random()*10+1)
+                // if(index%3==0)
+                // {
+                //   break
+                // }
                 ws.send(message, options, function(err) {
                   return err ? reject(err) : resolve()
                 })
@@ -539,7 +545,7 @@ module.exports = syrup.serial()
           }
 
           function wsPingNotifier() {
-            return send('ping')
+            return send('ping?')
           }
 
           function wsFrameNotifier(frame) {
